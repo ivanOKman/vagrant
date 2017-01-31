@@ -12,6 +12,7 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
+	#config.vm.share_folder("nginx", "/root/share", "/vagrant/share-nfs", :nfs => true)
 
 #DEFAULT NAME OF THE VM
   #config.vm.box = "base"
@@ -20,6 +21,10 @@ config.vm.define "nginx" do |nginx|
 	nginx.vm.box = "manzhulin"
 	nginx.vm.hostname = "nginx"
 	nginx.vm.network :private_network, ip: "192.168.0.100"
+
+	nginx.vm.synced_folder "/root/share", "/vagrant/share-nfs"
+	config.vm.synced_folder "/root/share2", "/vagrant", type: "rsync"
+	
 
 	nginx.vm.provider :virtualbox do |v|
 		v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
